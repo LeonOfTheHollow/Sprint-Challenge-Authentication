@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { mysecret } = require("../../config");
 const User = require("../models/userModels");
 
-// const login = async function(req, res) {
+// const login = function(req, res) {
 //   const { username, password } = req.body;
 //   User.findOne({ username }, (err, user) => {
 //     if (err) {

@@ -7,6 +7,7 @@ export const USER_AUTHENTICATED = 'USER_AUTHENTICATED';
 export const USER_UNAUTHENTICATED = 'USER_UNAUTHENTICATED';
 export const AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR';
 export const GET_USERS = 'GET_USERS';
+export const GET_JOKES = 'GET_JOKES';
 export const CHECK_IF_AUTHENTICATED = 'CHECK_IF_AUTHENTICATED';
 
 export const authError = error => {
@@ -42,7 +43,7 @@ export const login = function(username, password, history) {
       const token = response.data.token;
       localStorage.setItem('token', token);
       dispatch({ type: USER_AUTHENTICATED });
-      history.push('/users');
+      history.push('/jokes');
     } catch(err) {
       dispatch(authError('There was a problem getting the signin token.'));
     };
@@ -52,6 +53,7 @@ export const login = function(username, password, history) {
 export const logout = () => {
   return dispatch => {
     localStorage.clear('token');
+    //history.push('/signin');
   };
 };
 
@@ -67,6 +69,22 @@ export const getUsers = function() {
       });
     } catch(err) {
       dispatch(authError('failed to fetch users.'));
+    };
+  };
+};
+
+export const getJokes = function() {
+  return async dispatch => {
+    try {
+      const response = await axios.get(`${ROOT_URL}/jokes`, {
+        headers: { Authorization: localStorage.getItem('token') },
+      });
+      dispatch({
+        type: GET_JOKES,
+        payload: response.data,
+      });
+    } catch(err) {
+      dispatch(authError('Not authorized! Not joking!'));
     };
   };
 };
